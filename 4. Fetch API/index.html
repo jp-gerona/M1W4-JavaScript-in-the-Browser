@@ -14,15 +14,112 @@
             // Relevant Tutorial: https://www.youtube.com/watch?v=cuEtnrL9-H0
             // Relevant Link: https://www.freecodecamp.org/news/how-to-fetch-data-from-an-api-using-the-fetch-api-in-javascript/
 
+            // Checkpoint 4.1 What are HTTP requests and reponses? What are the various HTTP verbs and what do they do?
+            // Answer: 
+
+            //  HTTP Request - Sent by the client to initiate an action or request data from server.
+            //  HTTP Response - Sent by the server back to client in response to the request.
+            //  200 - OK / Request succeeded.
+            //  404 - Not found / Request for data not found on the server.
+            //  500 - Internal Server Error / Generic server error.
+
+            //  HTTP Verbs:
+            //  GET - Retrieve data from the server.
+            //  POST - Send data to be processed by the server (Like submitting a form).
+            //  PUT - Update existing data on the server.
+            //  DELETE - Delete data from the server.
+
             // Todo 4.1 Fetch the list of users. Outout the first and second page of users.
+            fetch("https://reqres.in/api/users?page=1")
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error("Error with fetching api: ", error);
+                });
+                
+            fetch("https://reqres.in/api/users?page=2")
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error("Error with fetching api: ", error);
+                });
+            
 
             // Todo 4.2 Fetch the information about a single user. Display their information
+            fetch("https://reqres.in/api/users/7")
+                .then(res => res.json())
+                .then(data => console.log(
+                    `ID: ${data.data.id}\n` +
+                    `First Name: ${data.data.first_name}\n` +
+                    `Last Name: ${data.data.last_name}\n` +
+                    `Email Address: ${data.data.email}`
+                ))
+                .catch(error => {
+                    console.error("Error with fetching api: ", error);
+                });
 
             // Todo 4.3 Create a user
-
+            fetch("https://reqres.in/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify({
+                    id: "13",
+                    first_name: "Julian Peter",
+                    last_name: "Gerona",
+                    email: "julianpetergerona@gmail.com"     
+                })
+            })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                
             // Todo 4.4 Update the information of the user that you have created
+            const userDataUpdate = {
+                first_name: "Lebron",
+                last_name: "James"
+            }
+
+            fetch("https://reqres.in/api/users/13", {
+                method: "PUT",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(userDataUpdate)
+            })
+                .then(res => res.json())
+                .then(data => console.log(data))
 
             // Todo 4.5 Delete the user that you have created
+            fetch("https://reqres.in/api/users/13", {
+                method: "DELETE"
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Failed to delete user!");
+                    }
+                    console.log("User has been successfully deleted!");
+                })
+                .then(data => console.log(data)) // will log undefined
+                .catch(error => {
+                    console.error("Error with deleting user: ", error.message);
+                })
+            
+            // Checkpoint 4.2 What is the difference between callbacks, then-catch vs await-try-catch? When should you use one over the other
+            // Answer: 
+
+            // Callbacks:
+            //  - Passes a function to be executed later.
+            //  - It is okay with simple cases, but should be avoided with complex async logic or you will get the pyramid of doom.
+            
+            // Then-catch
+            //  - A.K.A Promise Chains. Then/Catch retuns promises allowing chaining of async logic.
+            //  - Avoids pyramid of doom but can stll get quite complex and nested.
+
+            // Await-try-catch 
+            //  - A.K.A Async/Await. Uses promises under the hood by using the keyword "await", which makes it look like synchronous code.
+            //  - Best approach with async logic and complex async logic and clean syntax, use try/catch blocks for error handling.  
+                
         }
         start()
 
